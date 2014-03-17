@@ -246,9 +246,9 @@ prescanr f z = tail . scanr f z
 postscanr f z = init . scanr f z
 
 accum :: (a -> b -> a) -> [a] -> [(Int,b)] -> [a]
-accum f xs ps = go xs ps' 0
+accum f ls rs = go ls rs' 0
   where
-    ps' = sortBy (\p q -> compare (fst p) (fst q)) ps
+    rs' = sortBy (compare `on` fst) rs
 
     go (x:xs) ((i,y) : ps) j
       | i == j     = go (f x y : xs) ps j
@@ -256,14 +256,7 @@ accum f xs ps = go xs ps' 0
     go [] _ _      = []
 
 (//) :: [a] -> [(Int, a)] -> [a]
-xs // ps = go xs ps' 0
-  where
-    ps' = sortBy (\p q -> compare (fst p) (fst q)) ps
-
-    go (x:xs) ((i,y) : ps) j
-      | i == j     = go (y:xs) ps j
-    go (x:xs) ps j = x : go xs ps (j+1)
-    go [] _ _      = []
+(//) = accum (flip const)
 
 
 withIndexFirst m f = m (uncurry f) . zip [0..]
