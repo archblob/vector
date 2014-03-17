@@ -136,7 +136,7 @@ testPolymorphicFunctions _ = $(testProperties [
                  S.scanl1 `eq` scanl1
     prop_scanl1' :: P ((a -> a -> a) -> S.Bundle v a -> S.Bundle v a) = notNullS2 ===>
                  S.scanl1' `eq` scanl1
- 
+
     prop_concatMap    = forAll arbitrary $ \xs ->
                         forAll (sized (\n -> resize (n `div` S.length xs) arbitrary)) $ \f -> unP prop f xs
       where
