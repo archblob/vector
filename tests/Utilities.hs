@@ -10,7 +10,7 @@ import qualified Data.Vector.Storable as DVS
 import qualified Data.Vector.Unboxed as DVU
 import qualified Data.Vector.Fusion.Bundle as S
 
-import Control.Monad (foldM, foldM_, zipWithM, zipWithM_)
+import Control.Monad (foldM, foldM_, replicateM, zipWithM, zipWithM_)
 import Control.Monad.Trans.Writer
 import Data.Function (on)
 import Data.Functor.Identity
@@ -222,7 +222,7 @@ index_value_pairs 0 = return []
 index_value_pairs m = sized $ \n ->
   do
     len <- choose (0,n)
-    is <- sequence [choose (0,m-1) | i <- [1..len]]
+    is <- replicateM len $ choose (0,m-1)
     xs <- vector len
     return $ zip is xs
 
@@ -231,7 +231,7 @@ indices 0 = return []
 indices m = sized $ \n ->
   do
     len <- choose (0,n)
-    sequence [choose (0,m-1) | i <- [1..len]]
+    replicateM len $ choose (0,m-1)
 
 
 -- Additional list functions

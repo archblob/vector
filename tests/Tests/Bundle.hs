@@ -12,7 +12,6 @@ import Test.Framework.Providers.QuickCheck2
 
 import Text.Show.Functions ()
 import Data.List           (foldl', foldl1', unfoldr, find, findIndex)
-import System.Random       (Random)
 
 #define COMMON_CONTEXT(a) \
  VANILLA_CONTEXT(a)
