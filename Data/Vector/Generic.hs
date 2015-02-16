@@ -962,8 +962,7 @@ indexed :: (Vector v a, Vector v (Int,a)) => v a -> v (Int,a)
 indexed = unstream . Bundle.indexed . stream
 
 -- Mapping
--- -------
-
+-- ------
 -- | /O(n)/ Map a function over a vector
 map :: (Vector v a, Vector v b) => (a -> b) -> v a -> v b
 {-# INLINE map #-}

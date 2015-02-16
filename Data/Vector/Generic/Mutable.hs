@@ -32,12 +32,17 @@ module Data.Vector.Generic.Mutable (
   -- ** Initialisation
   new, unsafeNew, replicate, replicateM, clone,
 
-  -- ** Growing
+  -- ** Growing  grow, unsafeGrow,
   grow, unsafeGrow,
   growFront, unsafeGrowFront,
 
   -- ** Restricting memory usage
   clear,
+
+  -- * Elementwise operations
+  
+  -- ** Indexing
+  indexed,
 
   -- * Accessing individual elements
   read, write, modify, swap, exchange,
@@ -72,7 +77,7 @@ import           Data.Vector.Fusion.Util        ( delay_inline )
 import Control.Monad.Primitive ( PrimMonad, PrimState )
 
 import Prelude hiding ( length, null, replicate, reverse, map, read,
-                        take, drop, splitAt, init, tail )
+                        take, drop, splitAt, init, tail, zipWith, zipWith3)
 
 #include "vector.h"
 
@@ -986,3 +991,159 @@ partitionUnknown f s
                       v2' <- unsafeAppend1 v2 i2 x
                       return (v1, i1, v2', i2+1)
 
+indexed :: (PrimMonad m, MVector v a, MVector v (Int,a))
+        => v (PrimState m) a -> m (v (PrimState m) (Int, a))
+{-# INLINE indexed #-}
+indexed = undefined
+
+map :: (PrimMonad m, MVector v a, MVector v b)
+    => (a -> b) -> v (PrimState m) a -> m (v (PrimState m) b)
+{-# INLINE map #-}
+map = undefined
+
+imap :: (PrimMonad m, MVector v a, MVector v b)
+     => (Int -> a -> b) -> v (PrimState m) a -> m (v (PrimState m) b)
+{-# INLINE imap #-}
+imap = undefined
+
+concatMap :: (PrimMonad m, MVector v a, MVector v b)
+  => (a -> v (PrimState m) b) -> v (PrimState m) a -> m (v (PrimState m) b)
+{-# INLINE concatMap #-}
+concatMap = undefined
+
+zipWith :: (PrimMonad m, MVector v a, MVector v b, MVector v c)
+        => (a -> b -> c) -> v (PrimState m) a -> v (PrimState m) b
+        -> m (v (PrimState m) c)
+{-# INLINE zipWith #-}
+zipWith = undefined
+
+zipWith3 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d)
+  => (a -> b -> c -> d) -> v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c
+  -> m (v (PrimState m) d)
+{-# INLINE zipWith3 #-}
+zipWith3 = undefined
+
+zipWith4 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e)
+  => (a -> b -> c -> d -> e) -> v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d
+  -> m (v (PrimState m) e)
+{-# INLINE zipWith4 #-}
+zipWith4 = undefined
+
+zipWith5 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e, MVector v f)
+  => (a -> b -> c -> d -> e -> f) -> v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d
+  -> v (PrimState m) e -> m (v (PrimState m) f)
+{-# INLINE zipWith5 #-}
+zipWith5 = undefined
+
+zipWith6 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e, MVector v f)
+  => (a -> b -> c -> d -> e -> f -> g) -> v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d
+  -> v (PrimState m) e -> v (PrimState m) f -> m (v (PrimState m) g)
+{-# INLINE zipWith6 #-}
+zipWith6 = undefined
+
+izipWith :: (PrimMonad m, MVector v a, MVector v b, MVector v c)
+        => (Int -> a -> b -> c) -> v (PrimState m) a -> v (PrimState m) b
+        -> m (v (PrimState m) c)
+{-# INLINE izipWith #-}
+izipWith = undefined
+
+izipWith3 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d)
+  => (Int -> a -> b -> c -> d) -> v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c
+  -> m (v (PrimState m) d)
+{-# INLINE izipWith3 #-}
+izipWith3 = undefined
+
+izipWith4 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e)
+  => (Int -> a -> b -> c -> d -> e) -> v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d
+  -> m (v (PrimState m) e)
+{-# INLINE izipWith4 #-}
+izipWith4 = undefined
+
+izipWith5 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e, MVector v f)
+  => (Int -> a -> b -> c -> d -> e -> f) -> v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d
+  -> v (PrimState m) e -> m (v (PrimState m) f)
+{-# INLINE izipWith5 #-}
+izipWith5 = undefined
+
+izipWith6 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e, MVector v f)
+  => (Int -> a -> b -> c -> d -> e -> f -> g) -> v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d  -> v (PrimState m) e -> v (PrimState m) f -> m (v (PrimState m) g)
+{-# INLINE izipWith6 #-}
+izipWith6 = undefined
+
+zip :: (PrimMonad m, MVector v a, MVector v b, MVector v (a,b))
+    => v (PrimState m) a -> v (PrimState m) b -> m (v (PrimState m) (a,b))
+{-# INLINE zip #-}
+zip = zipWith (,)
+
+zip3 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v (a,b,c))
+     => v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> m (v (PrimState m) (a,b,c))
+{-# INLINE zip3 #-}
+zip3 = zipWith3 (,,)
+
+zip4 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v (a,b,c,d))
+     => v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d
+     -> m (v (PrimState m) (a,b,c,d))
+{-# INLINE zip4 #-}
+zip4 = zipWith4 (,,,)
+
+zip5 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e, MVector v (a,b,c,d,e))
+     => v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d
+     -> v (PrimState m) e -> m (v (PrimState m) (a,b,c,d,e))
+{-# INLINE zip5 #-}
+zip5 = zipWith5 (,,,,)
+
+zip6 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e, MVector v f, MVector v (a,b,c,d,e,f))
+     => v (PrimState m) a -> v (PrimState m) b -> v (PrimState m) c -> v (PrimState m) d
+     -> v (PrimState m) e -> v (PrimState m) f -> m (v (PrimState m) (a,b,c,d,e,f))
+{-# INLINE zip6 #-}
+zip6 = zipWith6 (,,,,,)
+
+unzip :: (PrimMonad m, MVector v a, MVector v b, MVector v (a,b))
+      => v (PrimState m) (a,b) -> m (v (PrimState m) a, v (PrimState m) b)
+{-# INLINE unzip #-}
+unzip = undefined
+
+unzip3 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v (a,b,c))
+       => v (PrimState m) (a,b,c)
+       -> m (v (PrimState m) a, v (PrimState m) b, v (PrimState m) c)
+{-# INLINE unzip3 #-}
+unzip3 = undefined
+
+unzip4 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v (a,b,c,d))
+       => v (PrimState m) (a,b,c,d)
+       -> m (v (PrimState m) a, v (PrimState m) b, v (PrimState m) c, v (PrimState m) d)
+{-# INLINE unzip4 #-}
+unzip4 = undefined
+
+unzip5 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e, MVector v (a,b,c,d,e))
+       => v (PrimState m) (a,b,c,d,e)
+       -> m (v (PrimState m) a, v (PrimState m) b, v (PrimState m) c, v (PrimState m) d, v (PrimState m) e)
+{-# INLINE unzip5 #-}
+unzip5 = undefined
+
+unzip6 :: (PrimMonad m, MVector v a, MVector v b, MVector v c, MVector v d, MVector v e, MVector v f, MVector v (a,b,c,d,e,f))
+       => v (PrimState m) (a,b,c,d,e,f)
+       -> m (v (PrimState m) a, v (PrimState m) b, v (PrimState m) c, v (PrimState m) d, v (PrimState m) e, v (PrimState m) f)
+{-# INLINE unzip6 #-}
+unzip6 = undefined
+
+filter :: (PrimMonad m, MVector v a) => (a -> Bool) -> m (v (PrimState m) a)
+{-# INLINE filter #-}
+filter = undefined
+
+ifilter :: (PrimMonad m, MVector v a) => (Int -> a -> Bool) -> m (v (PrimState m) a)
+{-# INLINE ifilter #-}
+ifilter = undefined
+
+takeWhile :: (PrimMonad m, MVector v a) => (a -> Bool) -> m (v (PrimState m) a)
+{-# INLINE takeWhile #-}
+takeWhile = undefined
+
+dropWhile :: (PrimMonad m, MVector v a) => (a -> Bool) -> m (v (PrimState m) a)
+{-# INLINE dropWhile #-}
+dropWhile = undefined
+
+partition :: (PrimMonad m, MVector v a)
+          => (a -> Bool) -> m (v (PrimState m) a, v (PrimState m) a)
+{-# INLINE partition #-}
+partition = undefined
