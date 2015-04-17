@@ -180,7 +180,7 @@ test-suite vector-tests-O0
               TemplateHaskell
 
   Ghc-Options: -O0
-  Ghc-Options: -Wall -fno-warn-orphans -fno-warn-missing-signatures
+  Ghc-Options: -v -Wall -fno-warn-orphans -fno-warn-missing-signatures
 
 test-suite vector-tests-O2
   Default-Language: Haskell2010
@@ -203,4 +203,4 @@ test-suite vector-tests-O2
               TemplateHaskell
 
   Ghc-Options: -O2
-  Ghc-Options: -Wall -fno-warn-orphans -fno-warn-missing-signatures
+  Ghc-Options: -v -Wall -fno-warn-orphans -fno-warn-missing-signatures
